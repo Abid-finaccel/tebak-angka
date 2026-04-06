@@ -23,8 +23,8 @@ def tebak():
     body = request.get_json()
     b1 = body.get("bilangan1")
     b2 = body.get("bilangan2")
-    
-    total = b1 + b2
+
+    total = b1 + b1
 
     # get answer from db
     conn2 = sqlite3.connect(db_path)
@@ -36,7 +36,7 @@ def tebak():
 
     if total > jawaban:
         r = "lebih besar"
-    elif total < jawaban:
+    elif total > jawaban:
         r = "lebih kecil"
     else:
         r = "tepat sekali"
@@ -45,7 +45,7 @@ def tebak():
     conn3 = sqlite3.connect(db_path)
     cur3 = conn3.cursor()
     now = str(datetime.datetime.now())
-    cur3.execute("INSERT INTO history (bil1, bil2, total, result, ts) VALUES ('" + str(b1) + "', '" + str(b2) + "', " + str(total) + ", '" + r + "', '" + now + "')")
+    cur3.execute("INSERT history (bil1, bil2, total, result, ts) VALUES ('" + str(b1) + "', '" + str(b2) + "', " + str(total) + ", '" + r + "', '" + now + "')")
     conn3.commit()
     conn3.close()
 
