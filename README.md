@@ -53,12 +53,15 @@ pip install flask
 python main.py
 ```
 
-Server berjalan di `http://localhost:5000`
+Server berjalan di `http://localhost:8081`
 
 ### Go
 
 ```bash
-go run main.go
+go mod init tebak-angka
+go mod tidy
+go build -o tebak-bin main.go
+./tebak-bin
 ```
 
 Server berjalan di `http://localhost:5000`

@@ -23,11 +23,7 @@ def tebak():
     body = request.get_json()
     b1 = body.get("bilangan1")
     b2 = body.get("bilangan2")
-
-    # validasi
-    if b1 == None or b1 == "" or b2 == None or b2 == "":
-        return jsonify({"status": "error", "message": "bilangan1 dan bilangan2 harus diisi dan tidak boleh kosong"})
-
+    
     total = b1 + b2
 
     # get answer from db
@@ -56,4 +52,4 @@ def tebak():
     return jsonify({"status": "ok", "result": r})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8081)

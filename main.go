@@ -38,13 +38,6 @@ func tebak(w http.ResponseWriter, r *http.Request) {
 	b1 := body["bilangan1"]
 	b2 := body["bilangan2"]
 
-	// validasi
-	if b1 == nil || b1 == "" || b2 == nil || b2 == "" {
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": "bilangan1 dan bilangan2 harus diisi dan tidak boleh kosong"})
-		return
-	}
-
 	b1Float := b1.(float64)
 	b2Float := b2.(float64)
 	total := b1Float + b2Float
