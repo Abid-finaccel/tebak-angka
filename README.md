@@ -1,50 +1,50 @@
-# Tebak Angka - Technical Test
+# Guess the Number - Technical Test
 
-## Garis Besar Service
+## Service Overview
 
-Service sederhana untuk permainan **tebak angka**. User mengirimkan 2 bilangan, lalu service menjumlahkan kedua bilangan tersebut dan membandingkan hasilnya dengan jawaban yang tersimpan di database.
+A simple service for a **number guessing** game. The user sends 2 numbers, then the service adds both numbers together and compares the result with the answer stored in the database.
 
 ### Flow
 
-1. User mengirim `bilangan1` dan `bilangan2` via POST request
-2. Service menjumlahkan kedua bilangan: `total = bilangan1 + bilangan2`
-3. Service mengambil jawaban yang benar dari database
-4. Service membandingkan total dengan jawaban dan mengembalikan hasil:
-   - `"lebih besar"` — jika total lebih besar dari jawaban
-   - `"lebih kecil"` — jika total lebih kecil dari jawaban
-   - `"tepat sekali"` — jika total sama dengan jawaban
-5. Setiap percobaan dicatat ke tabel `history` di database
+1. User sends `bilangan1` and `bilangan2` via POST request
+2. Service adds both numbers: `total = bilangan1 + bilangan2`
+3. Service retrieves the correct answer from the database
+4. Service compares the total with the answer and returns the result:
+   - `"lebih besar"` — if the total is greater than the answer
+   - `"lebih kecil"` — if the total is less than the answer
+   - `"tepat sekali"` — if the total equals the answer
+5. Each attempt is logged to the `history` table in the database
 
 ### Tech Stack
 
-| Versi | File | Framework | Database |
-|-------|------|-----------|----------|
+| Version | File | Framework | Database |
+|---------|------|-----------|----------|
 | Python | `main.py` | Flask | SQLite |
 | Go | `main.go` | net/http | SQLite |
 
 ### Database Schema
 
-**Tabel `answer`** — menyimpan jawaban yang benar
+**Table `answer`** — stores the correct answer
 
 | Column | Type | Description |
 |--------|------|-------------|
 | id | INTEGER (PK) | ID |
-| number | INTEGER | Angka jawaban |
+| number | INTEGER | Answer number |
 
-**Tabel `history`** — menyimpan riwayat percobaan
+**Table `history`** — stores attempt history
 
 | Column | Type | Description |
 |--------|------|-------------|
 | id | INTEGER (PK, AUTO) | ID |
-| bil1 | TEXT | Bilangan pertama |
-| bil2 | TEXT | Bilangan kedua |
-| total | INTEGER | Hasil penjumlahan |
-| result | TEXT | Hasil perbandingan |
+| bil1 | TEXT | First number |
+| bil2 | TEXT | Second number |
+| total | INTEGER | Sum result |
+| result | TEXT | Comparison result |
 | ts | TEXT | Timestamp |
 
 ---
 
-## Cara Menjalankan
+## How to Run
 
 ### Python
 
@@ -53,7 +53,7 @@ pip install flask
 python main.py
 ```
 
-Server berjalan di `http://localhost:8081`
+Server runs at `http://localhost:8081`
 
 ### Go
 
@@ -64,7 +64,7 @@ go build -o tebak-bin main.go
 ./tebak-bin
 ```
 
-Server berjalan di `http://localhost:5000`
+Server runs at `http://localhost:5000`
 
 ---
 
@@ -89,7 +89,7 @@ Content-Type: application/json
 
 ## Example Curl & Output
 
-### 1. Tebakan lebih kecil dari jawaban
+### 1. Guess is less than the answer
 
 ```bash
 curl -X POST http://localhost:5000/tebak \
@@ -106,7 +106,7 @@ curl -X POST http://localhost:5000/tebak \
 }
 ```
 
-### 2. Tebakan lebih besar dari jawaban
+### 2. Guess is greater than the answer
 
 ```bash
 curl -X POST http://localhost:5000/tebak \
@@ -123,7 +123,7 @@ curl -X POST http://localhost:5000/tebak \
 }
 ```
 
-### 3. Tebakan tepat
+### 3. Guess is exact
 
 ```bash
 curl -X POST http://localhost:5000/tebak \
@@ -140,7 +140,7 @@ curl -X POST http://localhost:5000/tebak \
 }
 ```
 
-### 4. Validasi error — field kosong
+### 4. Validation error — missing field
 
 ```bash
 curl -X POST http://localhost:5000/tebak \
@@ -157,7 +157,7 @@ curl -X POST http://localhost:5000/tebak \
 }
 ```
 
-### 5. Validasi error — body kosong
+### 5. Validation error — empty body
 
 ```bash
 curl -X POST http://localhost:5000/tebak \
