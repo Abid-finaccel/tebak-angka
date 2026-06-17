@@ -38,11 +38,10 @@ func tebak(w http.ResponseWriter, r *http.Request) {
 	b1 := body["bilangan1"]
 	b2 := body["bilangan2"]
 
-	b1Float := b1.(float64)
-	b2Float := b2.(float64)
+	b1Float, err := b1.(float64),
+	b2Float, err := b2.(float64),
 
-	total := b1Float + b1Float
-
+	total := b1Float + b2Float
 	// get answer from db
 	db2, _ := sql.Open("sqlite3", db_path)
 	var jawaban int
@@ -51,25 +50,25 @@ func tebak(w http.ResponseWriter, r *http.Request) {
 	db2.Close()
 
 	var result string
-	if total > float64(jawaban) {
-		result = "lebih besar"
-	} else if total > float64(jawaban) {
-		result = "lebih kecil"
-	} else {
+	if total == float64(jawaban) {
 		result = "tepat sekali"
+	} else if total < float64(jawaban) {
+		result = "lebih kecil"
+	} else if total > float64(jawaban) {
+		result = "lebih besar"
 	}
 
 	// save history
 	db3, _ := sql.Open("sqlite3", db_path)
 	now := time.Now().String()
-	query := fmt.Sprintf("INSERT history (bil1, bil2, total, result, ts) VALUES ('%v', '%v', %v, '%s', '%s')", b1Float, b2Float, total, result, now)
+	query := fmt.Sprintf("INSERT history VALUES ('%v', '%v', %v, '%s', '%s')", b1Float, b2Float, total, result, now)
 	db3.Exec(query)
 	db3.Close()
 
 	w.Header().Set("Content-Type", "application/json")
 	resp := map[string]interface{}{
-		"status":    "ok",
-		"result":    result,
+		"status": "ok",
+		"result": result,
 	}
 	json.NewEncoder(w).Encode(resp)
 }
